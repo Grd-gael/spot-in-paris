@@ -1,6 +1,7 @@
-import { fetchEvents } from "../models/EventModel.js"
+import { fetchEvents, filterEvents } from "../models/EventModel.js";
 
 export async function loadEvents() {
-    const events = await fetchEvents()
+    let events = await fetchEvents();
+    events = filterEvents(events, null, null, null);
     return events;
 }

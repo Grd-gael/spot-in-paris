@@ -3,3 +3,24 @@
 *::before {
   box-sizing: border-box;
 }
+
+.font-playfair {
+  font-family: "Playfair Display", serif;
+}
+.event-img {
+  width: 200px;
+  min-width: 200px;
+  height: 180px;
+  object-fit: cover;
+}
+.btn-dark-custom:hover {
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+}
+@media (max-width: 576px) {
+  .event-img {
+    width: 100%;
+    min-width: unset;
+    height: 160px;
+  }
+}
