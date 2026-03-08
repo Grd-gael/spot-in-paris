@@ -29,8 +29,7 @@ export function renderEvents(events) {
       ).join('')
       : '';
 
-    const dateBadge = event.fields.date_start && event.fields.date_end
-      ? `Du ${new Date(event.fields.date_start).toLocaleDateString('fr-FR')} au ${new Date(event.fields.date_end).toLocaleDateString('fr-FR')}` : 'Permanent';
+    const dateBadge = event.fields.date_start && event.fields.date_end ? `Du ${new Date(event.fields.date_start).toLocaleDateString('fr-FR')} au ${new Date(event.fields.date_end).toLocaleDateString('fr-FR')}` : '';
 
     const address = [
       event.fields.address_street,
@@ -86,37 +85,37 @@ export function renderEvents(events) {
 renderFilterTag(tagsWanted);
 renderEvents(events);
 
+
+
 document.getElementById("tag-filter").addEventListener("change", (e) => {
-  const tagSelected = e.target.value ?? null;
-  const search = document.getElementById("search-bar").value.toLowerCase() ?? null;
-  const dateSelected = document.getElementById("date-filter").value ? new Date(document.getElementById("date-filter").value) : null;
-  const filteredEvents = filterEvents(events, search, tagSelected, dateSelected);
-  renderEvents(filteredEvents)
+  HandleChange();
 });
 
 document.getElementById("search-bar").addEventListener("input", (e) => {
-  const search = e.target.value.toLowerCase();
+  HandleChange();
+});
+
+document.getElementById("free-checkbox").addEventListener("change", (e) => {
+  HandleChange();
+});
+
+document.getElementById("date-filter").addEventListener("change", (e) => {
+  HandleChange();
+});
+
+const HandleChange = () => {
+  const isFreeChecked = document.getElementById("free-checkbox").checked;
+  const search = document.getElementById("search-bar").value.toLowerCase() ?? null;
   const tagSelected = document.getElementById("tag-filter").value ?? null
   const dateSelected = document.getElementById("date-filter").value ? new Date(document.getElementById("date-filter").value) : null;
-  const filteredEvents = filterEvents(events, search, tagSelected, dateSelected);
+  const filteredEvents = filterEvents(events, search, tagSelected, dateSelected, isFreeChecked);
   renderEvents(filteredEvents);
-});
+}
 
 document.getElementById("reset-button").addEventListener("click", () => {
   document.getElementById("search-bar").value = "";
   document.getElementById("tag-filter").value = "";
   document.getElementById("date-filter").value = "";
+  document.getElementById("free-checkbox").checked = false;
   renderEvents(events);
 });
-
-document.getElementById("date-filter").addEventListener("change", (e) => {
-  const selectedDate = e.target.value ? new Date(e.target.value) : null;
-  const filteredEvents = filterEvents(events, null, null, selectedDate);
-
-
-
-  renderEvents(filteredEvents);
-});
-
-
-

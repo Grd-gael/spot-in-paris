@@ -13,48 +13,43 @@ export async function fetchEvents() {
 
 
 
-export function filterEvents(events, search, tagSelected, dateSelected) {
+export function filterEvents(events, search, tagSelected, dateSelected, freeOnly) {
 
-    if (!tagSelected && !search) {
-        return events.filter(event =>
-            event.fields.qfap_tags && event.fields.qfap_tags.split(";").some(tag =>
-                tagsWanted.some(tagWanted =>
-                    tag.toLowerCase().includes(tagWanted.toLowerCase())
-                )
-            )
-        )
-    }
+    return events.filter(event => {
 
-    else if (search && !tagSelected) {
+        const fields = event.fields
 
-        return events.filter(event =>
-            (event.fields.title && event.fields.title.toLowerCase().includes(search)) ||
-            (event.fields.lead_text && event.fields.lead_text.toLowerCase().includes(search))
-        );
-    }
+        const matchesTag = tagSelected ? fields.qfap_tags && fields.qfap_tags.split(";").some(tag => tag.toLowerCase() == tagSelected.toLowerCase())
+            : tagsWanted.some(wanted => fields.qfap_tags && fields.qfap_tags.split(";").some(tag => tag.toLowerCase().includes(wanted.toLowerCase())))
 
-    else if (!search && tagSelected) {
-        return events.filter(event =>
-            event.fields.qfap_tags && event.fields.qfap_tags.split(";").some(tag =>
-                tag.toLowerCase() === tagSelected.toLowerCase()
-            )
-        );
-    }
+        const matchesSearch = search ? (
+            (fields.title && fields.title.toLowerCase().includes(search.toLowerCase())) ||
+            (fields.lead_text && fields.lead_text.toLowerCase().includes(search.toLowerCase()))
+        ) : true;
 
-    else {
+        const matchesDate = dateSelected ? (
+            fields.date_start &&
+            fields.date_end &&
+            fields.date_start.slice(0, 10) <= dateSelected.toISOString().slice(0, 10) &&
+            fields.date_end.slice(0, 10) >= dateSelected.toISOString().slice(0, 10)
+        ) : true;
 
-        return events.filter(event => {
-            const matchesSearch = event.fields.title.toLowerCase().includes(search.toLowerCase()) ||
-                (event.fields.lead_text && event.fields.lead_text.toLowerCase().includes(search.toLowerCase()));
-
-            const matchesTag = !tagSelected || event.fields.qfap_tags?.split(';').some(tag =>
-                tag.toLowerCase().includes(tagSelected.toLowerCase())
-            );
-
-            return matchesSearch && matchesTag;
-        });
-
-    }
+        if (fields.date_start && fields.date_end && dateSelected) {
+            console.log("Comparing dates for event:", fields.title);
+            console.log("Event start date:", fields.date_start.slice(0, 10));
+            console.log("Event end date:", fields.date_end.slice(0, 10));
+            console.log("Selected date:", dateSelected.toISOString().slice(0, 10));
+            console.log(matchesDate);
+        }
 
 
-};
+
+        const matchesFree = freeOnly ? (
+            fields.price_type && fields.price_type.toLowerCase().includes("gratuit")
+        ) : true;
+
+        return matchesTag && matchesSearch && matchesDate && matchesFree
+
+    })
+
+}
