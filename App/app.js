@@ -67,7 +67,6 @@ export function renderEvents(events) {
               ${event.fields.lead_text ?? ''}
             </p>
 
-            <!-- Footer -->
             <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
               ${price}
               <a href="${link}" class="btn btn-dark btn-sm rounded-1 btn-dark-custom text-uppercase" style="font-size:0.7rem;letter-spacing:1.5px" target="_blank">
