@@ -7,7 +7,6 @@ export async function fetchEvents() {
     const response = await fetch(url);
     const json = await response.json();
 
-    console.log(json.records);
     return json.records;
 };
 
@@ -36,14 +35,6 @@ export function filterEvents(events, search, tagSelected, dateSelected, freeOnly
             fields.date_start.slice(0, 10) <= dateSelected.toISOString().slice(0, 10) &&
             fields.date_end.slice(0, 10) >= dateSelected.toISOString().slice(0, 10)
         ) : true;
-
-        if (fields.date_start && fields.date_end && dateSelected) {
-            console.log("start:", fields.date_start.slice(0, 10));
-            console.log("end:", fields.date_end.slice(0, 10));
-            console.log("Date selected:", dateSelected.toISOString().slice(0, 10));
-            console.log(matchesDate);
-        }
-
 
 
         // Filtrer les évènements gratuits
