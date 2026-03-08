@@ -19,14 +19,17 @@ export function filterEvents(events, search, tagSelected, dateSelected, freeOnly
 
         const fields = event.fields
 
+        // Filtrer les évènements par les types
         const matchesTag = tagSelected ? fields.qfap_tags && fields.qfap_tags.split(";").some(tag => tag.toLowerCase() == tagSelected.toLowerCase())
             : tagsWanted.some(wanted => fields.qfap_tags && fields.qfap_tags.split(";").some(tag => tag.toLowerCase().includes(wanted.toLowerCase())))
 
+        // Filtrer les évènements par la barre de recherche
         const matchesSearch = search ? (
             (fields.title && fields.title.toLowerCase().includes(search.toLowerCase())) ||
             (fields.lead_text && fields.lead_text.toLowerCase().includes(search.toLowerCase()))
         ) : true;
 
+        // Filtrer les évènements par la date
         const matchesDate = dateSelected ? (
             fields.date_start &&
             fields.date_end &&
@@ -35,15 +38,15 @@ export function filterEvents(events, search, tagSelected, dateSelected, freeOnly
         ) : true;
 
         if (fields.date_start && fields.date_end && dateSelected) {
-            console.log("Comparing dates for event:", fields.title);
-            console.log("Event start date:", fields.date_start.slice(0, 10));
-            console.log("Event end date:", fields.date_end.slice(0, 10));
-            console.log("Selected date:", dateSelected.toISOString().slice(0, 10));
+            console.log("start:", fields.date_start.slice(0, 10));
+            console.log("end:", fields.date_end.slice(0, 10));
+            console.log("Date selected:", dateSelected.toISOString().slice(0, 10));
             console.log(matchesDate);
         }
 
 
 
+        // Filtrer les évènements gratuits
         const matchesFree = freeOnly ? (
             fields.price_type && fields.price_type.toLowerCase().includes("gratuit")
         ) : true;

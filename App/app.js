@@ -10,6 +10,7 @@ export function renderFilterTag(tags) {
     selectTag.innerHTML += `<option value="${tag.toLowerCase()}">${tag}</option>`;
   })
 };
+renderFilterTag(tagsWanted);
 
 export function renderEvents(events) {
   const container = document.getElementById("events");
@@ -82,10 +83,11 @@ export function renderEvents(events) {
 }
 
 
-renderFilterTag(tagsWanted);
+
 renderEvents(events);
 
 
+// Détecter les différents filtres 
 
 document.getElementById("tag-filter").addEventListener("change", (e) => {
   HandleChange();
